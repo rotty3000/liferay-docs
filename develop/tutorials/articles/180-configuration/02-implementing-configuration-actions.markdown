@@ -1,19 +1,19 @@
 # Implementing Configuration Actions [](id=implementing-configuration-actions)
 
-When developing a Liferay application, it's important to think about the
-different configuration options that your application should support. It's also
-important to think about how users should be able to access your application's
-configuration interface. Liferay supports a flexible mechanism for configuring
+When developing an application, it's important to think about the different
+configuration options that your application should support. It's also important
+to think about how users should be able to access your application's
+configuration interface. @product@ supports a flexible mechanism for configuring
 applications. You can read about it in the
-[Making Your Applications Configurable (not yet written)]() tutorial. In this
-tutorial, you'll learn to implement a configuration action for your
-application. The configuration action is invoked when a user clicks on the gear
-icon of a Liferay application and selects *Configuration*.
+[Making Your Applications Configurable](/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable) 
+tutorial. In this tutorial, you'll learn to implement a configuration action.
+The configuration action is invoked when a user clicks on the gear icon and
+selects *Configuration*.
 
-![When a user clicks on a Liferay application's gear icon and selects *Configuration*, the application's configuration action is invoked.](../../images/gear-configuration.png)
+![When a user clicks the gear icon and selects *Configuration*, the application's configuration action is invoked.](../../images/gear-configuration.png)
 
 Liferay applications support a default configuration action. If you click on the
-gear icon of a Liferay application that has not been customized and then select
+gear icon of an application that has not been customized and then select
 *Configuration*, you'll find two standard tabs: Permissions and Sharing. These
 tabs provide standard options for configuring who can access your application
 and how you can make your application more widely available. If you follow the
@@ -28,21 +28,33 @@ configuration action, follow these steps:
    configuration in your configuration action class
 4. Implement the user interface for configuring your application
 
++$$$
+
+**Note:** To quickly see a working configuration action, deploy the
+`configuration-action` [Blade
+sample](https://github.com/liferay/liferay-blade-samples/tree/master/gradle/apps/configuration-action)
+and add the *Blade Message Portlet* to a page. Click the *Options* button
+(![Options](../../images/icon-app-options.png)) and select *Configuration*.
+Change the configuration options and save them to see them in action.
+
+$$$
+
 Let's get started.
 
 ## Creating a Configuration Interface [](id=creating-a-configuration-interface)
 
-As explained in the [Making Your Applications Configurable]() tutorial, if you
-want to make your application configurable, you should create a Java interface
-to represent the configuration. Decorate your interface with the `@Meta.OCD`
-annotation and specify a unique ID using the annotation's `id` attribute. A
-common pattern is to use the fully qualified class name of the interface for the
-ID since fully qualified class names are unique. Create public methods to
-represent configuration fields and decorate the methods with the `@Meta.AD`
-annotation. The return type of the method specifies the type of the field. To
-specify a field's default value, use the annotation's `deflt` attribute. To
-specify that a field is optional, set `required=false`. For more information
-about the `Meta.OCD` and `Meta.AD` annotations, please see the
+As explained in the
+[Making Your Applications Configurable](/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable)
+tutorial, if you want to make your application configurable, you should create a
+Java interface to represent the configuration. Decorate your interface with the
+`@Meta.OCD` annotation and specify a unique ID using the annotation's `id`
+attribute. A common pattern is to use the fully qualified class name of the
+interface for the ID since fully qualified class names are unique. Create public
+methods to represent configuration fields and decorate the methods with the
+`@Meta.AD` annotation. The return type of the method specifies the type of the
+field. To specify a field's default value, use the annotation's `deflt`
+attribute. To specify that a field is optional, set `required=false`. For more
+information about the `Meta.OCD` and `Meta.AD` annotations, please see the
 [bnd](http://www.aqute.biz/Bnd/MetaType) documentation. Here's a simple example:
 
     package com.liferay.docs.exampleconfig.configuration;
@@ -62,25 +74,26 @@ Add the following line to your project's `bnd.bnd` file:
     -metatype: *
 
 This line lets bnd use your configuration interface to generate an XML
-configuration file. This lets Liferay auto-generate a UI for your configuration
-in the System Settings area of the Control Panel. However, it's sometimes
-preferable for users to be able to access your configuration directly from the
-portlet without having to go to the Control Panel. In this tutorial, you'll
-learn how to facilitate this.
+configuration file. This lets @product@ auto-generate a UI for your
+configuration in the System Settings area of the Control Panel. However, it's
+sometimes preferable for users to be able to access your configuration directly
+from the portlet without having to go to the Control Panel. In this tutorial,
+you'll learn how to facilitate this.
 
 This sample configuration contains a single string field called `favoriteColor`.
 
 ## Referencing Your Configuration From Your Application Class [](id=referencing-your-configuration-from-your-application-class)
 
-As was also explained in the [Making Your Applications Configurable]() tutorial,
-if you want a reference to the configuration in your application class, you need
-to declare the configuration as a `volatile` member variable, decorate your
-application class with the `@Component` annotation, specify the appropriate
-`configurationPid` in the `@Component` annotation, add an appropriately
-annotated `activate` method that instantiates the configuration variable, and
-add a public getter method for each configuration field. Here's a simple
-example that makes the sample configuration discussed earlier available to a
-portlet class:
+As was also explained in the
+[Making Your Applications Configurable](/develop/tutorials/-/knowledge_base/7-0/making-your-applications-configurable)
+tutorial, if you want a reference to the configuration in your application
+class, you need to declare the configuration as a `volatile` member variable,
+decorate your application class with the `@Component` annotation, specify the
+appropriate `configurationPid` in the `@Component` annotation, add an
+appropriately annotated `activate` method that instantiates the configuration
+variable, and add a public getter method for each configuration field. Here's a
+simple example that makes the sample configuration discussed earlier available
+to a portlet class:
 
     package com.liferay.docs.exampleconfig.portlet;
 
@@ -97,9 +110,8 @@ portlet class:
     import org.osgi.service.component.annotations.Modified;
 
     import com.liferay.docs.exampleconfig.configuration.ExampleConfiguration;
+    import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
     import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
-
-    import aQute.bnd.annotation.metatype.Configurable;
 
     @Component(
         configurationPid =
@@ -135,7 +147,7 @@ portlet class:
             @Activate
             @Modified
             protected void activate(Map<Object, Object> properties) {
-                    _exampleConfiguration = Configurable.createConfigurable(
+                    _exampleConfiguration = ConfigurableUtil.createConfigurable(
                             ExampleConfiguration.class, properties);
             }
 
@@ -151,7 +163,7 @@ by the application's JSPs.
 ## Implementing a Configuration Action [](id=implementing-a-configuration-action)
 
 To implement a configuration action, you should create a class that extends
-Liferay's `DefaultConfigurationAction` class. Then you need to add a reference
+@product@'s `DefaultConfigurationAction` class. Then you need to add a reference
 to your configuration the same way that you added such a reference to your
 application class. Declare the configuration as a `volatile` member variable,
 decorate your configuration action class with the `@Component` annotation,
@@ -198,11 +210,10 @@ example:
     import org.osgi.service.component.annotations.Modified;
 
     import com.liferay.docs.exampleconfig.configuration.ExampleConfiguration;
+    import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
     import com.liferay.portal.kernel.portlet.ConfigurationAction;
     import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
     import com.liferay.portal.kernel.util.ParamUtil;
-
-    import aQute.bnd.annotation.metatype.Configurable;
 
     @Component(
         configurationPid = "com.liferay.docs.exampleconfig.configuration.ExampleConfiguration",
@@ -242,7 +253,7 @@ example:
         @Activate
         @Modified
         protected void activate(Map<Object, Object> properties) {
-            _exampleConfiguration = Configurable.createConfigurable(
+            _exampleConfiguration = ConfigurableUtil.createConfigurable(
                 ExampleConfiguration.class, properties);
         }
 
@@ -260,7 +271,7 @@ When creating a JSP-based user interface, it's convenient to create an
 `init.jsp` page for your application. The `init.jsp` page should contain all of
 the imports, tag library declarations, and other page components are required by
 your other JSPs. Each of your other pages should import `init.jsp` so that you
-don't need to duplicate code. Liferay follows this convention.
+don't need to duplicate code. @product@ follows this convention.
 
 Here's an example `init.jsp` file:
 
@@ -387,7 +398,7 @@ This JSP uses the `<liferay-portlet:actionURL />` and
 `configurationActionURL` and `configurationRenderURL`. The JSP presents a simple
 form that allows the user to select a favorite color. When the user submits the
 form, the `configurationActionURL` is invoked and the application's
-`processAction` method is invoked with the `favoriteAction` included as a
+`processAction` method is invoked with the `favoriteColor` included as a
 request parameter:
 
     <aui:form action="<%= configurationActionURL %>" method="post" name="fm">
@@ -404,16 +415,15 @@ the value of the `cmd` parameter is `update` (`Constants.CMD` equals `update`):
     <aui:input name="<%= Constants.CMD %>" type="hidden"
         value="<%= Constants.UPDATE %>" />
 
-Many Liferay applications read the value of the `cmd` parameter and perform some
+Many core applications read the value of the `cmd` parameter and perform some
 processing depending on its value.
 
-You can find a complete example project on Github here:
-[(not yet written)]()
-
-To test this example project, deploy the application to Liferay, add it to a
-page, click on the gear icon, and select *Configuration*. Select a favorite
-color and click *Save*. To confirm that your selection was saved as a portlet
-configuration setting, look for the application to display a message like this:
+If you're developing an application using the example code from this tutorial,
+deploy the application to @product@, add it to a page, and click on the *Options*
+button (![Options](../../images/icon-app-options.png)), then select
+*Configuration*. Select a favorite color and click *Save*. To confirm that your
+selection was saved as a portlet configuration setting, look for the application
+to display a message like this:
 
     Favorite color: blue!
 

@@ -94,7 +94,7 @@ classes.
 
 Now that you know the basics on creating Liferay module projects using `blade
 create`, you can visit the
-[Project Templates](/develop/tutorials/-/knowledge_base/7-0/project-templates)
+[Project Templates](/develop/reference/-/knowledge_base/7-0/project-templates)
 reference section to view specific `create` templates and how they work.
 
 Next, you'll explore Liferay's provided module samples and how to generate them
@@ -117,10 +117,10 @@ this, use the following syntax:
     blade samples <NAME>
 
 For example, if you wanted to generate the
-[blade.portlet.ds](https://github.com/liferay/liferay-blade-samples/tree/master/liferay-gradle/blade.portlet.ds)
+[portlet-ds](https://github.com/liferay/liferay-blade-samples/tree/master/gradle/apps/ds-portlet)
 sample, you could execute
 
-    blade samples blade.portlet.ds
+    blade samples ds-portlet
 
 For a full listing of all the available Blade samples, run
 
