@@ -54,8 +54,19 @@ issue the following command:
 
 +$$$
 
-**Note:** After a successful patch installation you must delete the *osgi/state*
-folder if it exists in your Liferay Home directory.
+**Note:** If @product@ isn't running Fix Pack 13 or later, you must delete the
+`/osgi/state` folder from the [Liferay Home
+folder](/discover/deployment/-/knowledge_base/7-0/installing-product#liferay-home)
+after a successful patch installation. Later versions contain a [bug
+fix](https://issues.liferay.com/browse/LPS-71424) that obviates this
+requirement. 
+
+Deleting the `/osgi/state` folder is undesirable, as important state information
+is stored there. For example, when an application is uninstalled through the
+[App Manager](discover/portal/-/knowledge_base/7-0/managing-and-configuring-apps), the uninstalled state is
+stored in the state folder. Installing a patch, deleting the state folder, and
+restarting @product@ causes all applications, including those previously
+uninstalled, to be reinstalled and started automatically.
 
 $$$
 
@@ -89,7 +100,15 @@ $$$
 During the installation, `patching-backup-deps.zip` and `patching-backup.zip`
 files are created and stored in the `ROOT/WEB-INF` folder. These files are
 necessary to restore the @product@'s original state; removing them would disable
-further patching.
+further patching. 
+
++$$$
+
+**Note:** When installing patches, @product@'s `web.xml` is always overwritten
+by the one contained in the patch. If you've customized `web.xml`, you must
+re-implement your customizations after installing a patch. 
+
+$$$
 
 The `patching-backup.zip` file is necessary for installing future patches,
 because the Patching Tool reverts the installed fix pack before installing a new
@@ -146,8 +165,9 @@ you don't want, remove it from the `patches` folder. When you run the
 If you want to remove all patches you've installed, use the `./patching-tool.sh
 revert` command. This removes all patches from your installation.
 
-The OSGi state folder may contain obsolete bundles in its cache that must be
-removed. If it exists, delete the *osgi/state* folder in Liferay Home.
+Prior to Fix Pack 13, the OSGi state folder could retain obsolete bundles in
+its cache. If you're running a version prior to Fix Pack 13, delete the
+*osgi/state* folder in Liferay Home.
 
 ## Cleaning Up [](id=cleaning-up)
 
@@ -186,7 +206,7 @@ the "diff" command. This command has four options:
 
 For detailed usage information, run `patching-tool help store`.
 
-## Separating the Patches from the @product@ Installation
+## Separating the Patches from the @product@ Installation [](id=separating-the-patches-from-the-product-installation)
 
 As of Patching Tool 2.0.6, there's a feature that helps reduce the patched
 @product@ bundle size. If the bundle has been patched, you can make it smaller
