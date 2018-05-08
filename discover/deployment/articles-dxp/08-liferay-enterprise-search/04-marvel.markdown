@@ -63,8 +63,9 @@ These terms will be useful to understand as you read this guide:
 
 - *Elasticsearch Home* refers to the root folder of your unzipped Elasticsearch 
    installation (for example, `elasticsearch-2.4.0`).
-- *Liferay Home* refers to the root folder of your @product@ installation. It 
-   contains the `osgi`, `deploy`, `data`, and `license` folders.
+- [*Liferay Home*](/discover/deployment/-/knowledge_base/7-0/installing-product#liferay-home)
+   refers to the root folder of your @product@ installation. It  contains the
+   `osgi`, `deploy`, `data`, and `license` folders.
 - *Kibana Home* refers to the root folder of your Kibana installation.
 
 ## Installing Kibana and Marvel [](id=installing-kibana-and-marvel)
@@ -82,7 +83,7 @@ Elasticsearch for @product@.
         ./bin/plugin install marvel-agent
 
 2.  Download a
-    [compatible](https://web.liferay.com/documents/14/21598941/Liferay+DXP+Compatibility+Matrix.pdf)
+    [compatible](https://web.liferay.com/group/customer/dxp/support/compatibility-matrix/enterprise-search)
     version of [Kibana](https://www.elastic.co/downloads/kibana) and extract it
     to your Liferay Home folder.
 
@@ -108,7 +109,8 @@ Elasticsearch for @product@.
 
 The next step is to configure Kibana to connect with Elasticsearch. The
 instructions vary depending on whether you are using
-[Shield](/discover/deployment/-/knowledge_base/7-0/shield) or not.
+[Shield](/discover/deployment/-/knowledge_base/7-0/securing-elasticsearch-with-shield) 
+or not.
 
 ## Configuring Kibana for Elasticsearch [](id=configuring-kibana-for-elasticsearch)
 

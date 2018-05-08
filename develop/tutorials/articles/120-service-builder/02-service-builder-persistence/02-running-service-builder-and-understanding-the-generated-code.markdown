@@ -133,7 +133,7 @@ than three classes for each entity. These customizable classes are
       layer; in your portlet classes, use `[ENTITY_NAME]LocalServiceUtil` or
       `[ENTITY_NAME]ServiceUtil` instead. 
 
-    ![Figure 1: Service Builder generates these persistence classes and interfaces. You shouldn't (and you won't need to) customize any of these classes or interfaces.](../../../images/service-builder-persistence-diagram.png)
+    ![Figure 2: Service Builder generates these persistence classes and interfaces. You shouldn't (and you won't need to) customize any of these classes or interfaces.](../../../images/service-builder-persistence-diagram.png)
 
 - Local Service (generated for an entity only if an entity's `local-service`
   attribute is set to `true` in `service.xml`)
@@ -153,7 +153,7 @@ than three classes for each entity. These customizable classes are
       `[ENTITY_NAME]LocalService`. This class is designed to be extended and it
       allows developers to customize the entity's local services.
 
-    ![Figure 2: Service Builder generates these service classes and interfaces. Only EventLocalServiceImpl allows custom methods to be added to the service layer.](../../../images/service-builder-service-diagram.png)
+    ![Figure 3: Service Builder generates these service classes and interfaces. Only EventLocalServiceImpl allows custom methods to be added to the service layer.](../../../images/service-builder-service-diagram.png)
 
 - Remote Service (generated for an entity only if an entity's `remote-service`
   attribute is *not* set to `false` in `service.xml`)
@@ -194,7 +194,7 @@ than three classes for each entity. These customizable classes are
       methods to the `[ENTITY_NAME]` interface the next time you run it.
     - `[ENTITY_NAME]Wrapper`: Wrapper, wraps `[ENTITY_NAME]`. 
 
-    ![Figure 3: Service Builder generates these model classes and interfaces. Only `EventImpl` allows custom methods to be added to the service layer.](../../../images/service-builder-model-diagram.png)
+    ![Figure 4: Service Builder generates these model classes and interfaces. Only `EventImpl` allows custom methods to be added to the service layer.](../../../images/service-builder-model-diagram.png)
 
 +$$$
 
@@ -229,9 +229,13 @@ you must do one of two things:
 1.  Write an [upgrade process](/develop/tutorials/-/knowledge_base/7-0/creating-an-upgrade-process-for-your-app) 
     to modify the tables and preserve the data, or
 
-2.  Run the `cleanServiceBuilder` task (supported on Gradle, Maven, and Ant),
-    which drops your tables so they get re-created the next time your app is
-    deployed. 
+2.  Run the `cleanServiceBuilder`
+    [Gradle task](/develop/reference/-/knowledge_base/7-0/db-support-gradle-plugin)
+    (also supported on Maven and Ant), which drops your tables so they get
+    re-created the next time your app is deployed. See the
+    [Maven DB Support Plugin](/develop/reference/-/knowledge_base/7-0/db-support-plugin)
+    reference article for instructions on how to run this command from a Maven
+    project.
 
 Use the first option when you have a released application and you must preserve
 your users' data. Use the second option when you're in the middle of development
