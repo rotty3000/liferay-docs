@@ -52,7 +52,7 @@ issue the following command:
 
     patching-tool install
 
-To make sure the all changed bundles replace the existing ones, it is
+To make sure the all changed OSGi bundles replace the existing ones, it is
 recommended to delete the `osgi/state` folder from the
 [Liferay Home folder](/discover/deployment/-/knowledge_base/7-0/installing-product#liferay-home). 
 
@@ -60,13 +60,13 @@ recommended to delete the `osgi/state` folder from the
 
 **Note**: The `osgi/state` folder in the
 [Liferay Home folder](/discover/deployment/-/knowledge_base/7-0/installing-product#liferay-home)
-contains OSGi bundle state information. If a patch's bundle is changed in such a
-way that the OSGI framework cannot detect any changes externally, the existing
-OSGi bundle, and its state information, is not changed. Hot fixes, for example,
-may contain in-place changes that do not use the API---the framework cannot
-detect such changes. Fix Packs may also contain changes that the framework
-cannot detect. It is recommended, therefore, to delete the `osgi/state` folder
-after doing any patching. 
+contains OSGi bundle state information. If an OSGi bundle in a patch is changed
+in such a way that the OSGI framework cannot detect any changes externally, the
+existing OSGi bundle, and its state information, is not changed. Hot fixes, for
+example, may contain in-place changes that do not use the API---the framework
+cannot detect such changes. Fix Packs may also contain changes that the
+framework cannot detect. It is recommended, therefore, to delete the
+`osgi/state` folder after doing any patching. 
 
 $$$ 
 
